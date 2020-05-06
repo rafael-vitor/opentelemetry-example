@@ -1,3 +1,10 @@
+const { NodeTracerProvider } = require('@opentelemetry/node');
+const provider = new NodeTracerProvider({
+  logLevel: 3,
+});
+
+provider.register()
+
 const express = require('express')
 const app = express()
 const port = 3000
