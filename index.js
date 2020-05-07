@@ -1,9 +1,19 @@
 const { NodeTracerProvider } = require('@opentelemetry/node');
-const provider = new NodeTracerProvider({
-  logLevel: 3,
+const { JaegerExporter } = require('@opentelemetry/exporter-jaeger');
+const { SimpleSpanProcessor } = require('@opentelemetry/tracing');
+
+// const provider = new NodeTracerProvider({ logLevel: 3, });
+const provider = new NodeTracerProvider();
+
+const serviceName = 'xesk';
+
+exporter = new JaegerExporter({
+  serviceName,
 });
 
-provider.register()
+provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
+
+provider.register();
 
 const express = require('express')
 const app = express()
