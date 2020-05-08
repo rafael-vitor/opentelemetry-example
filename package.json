@@ -9,11 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@opentelemetry/api": "^0.7.0",
     "@opentelemetry/exporter-jaeger": "^0.7.0",
     "@opentelemetry/node": "^0.7.0",
     "@opentelemetry/plugin-express": "^0.7.0",
     "@opentelemetry/plugin-http": "^0.7.0",
+    "@opentelemetry/plugin-redis": "^0.7.0",
     "@opentelemetry/tracing": "^0.7.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "redis": "2.6.0"
   }
 }
