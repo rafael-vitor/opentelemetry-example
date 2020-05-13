@@ -1,25 +1,14 @@
-const { tracer } = require('./tracer'); // needs to be done before modules are loaded;
+const { createTracer } = require('./tracer'); // needs to be done before modules are loaded;
+createTracer('server-redis');
 
 const express = require('express')
 const { redis } = require('./setup-redis')
 
 const app = express()
-const port = 3000
+const port = 4000
 
 async function setupRoutes() {
   const redisClient = await redis;
-  
-  app.get('/:key', (req, res) => {
-    const { key } = req.params;
-    redisClient.get(key, (err, result) => {
-      if (err) {
-        res.status(400).send(result);
-        throw err;
-      }
-      console.log(result);
-      res.status(200).send(result);
-    });
-  })
   
   app.get('/set', (req, res) => {
     if (!req.query) {
@@ -32,6 +21,19 @@ async function setupRoutes() {
 
     redisClient.set(key, value)
   })
+
+  app.get('/:key', (req, res) => {
+    const { key } = req.params;
+    redisClient.get(key, (err, result) => {
+      if (err) {
+        res.status(400).send(result);
+        throw err;
+      }
+      console.log(result);
+      res.status(200).send(result);
+    });
+  })
+  
 };
 
 
