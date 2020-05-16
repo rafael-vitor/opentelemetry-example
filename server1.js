@@ -26,7 +26,7 @@ const httpRequest = (host, port, path) => {
 
 async function setupRoutes() {
   app.get('/', async (_, res) => {
-    const values = ['test1', 'test2', 'test3', 'test4', 'test5'];
+    // const values = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()];
 
     // let resultList = [];
     // let result;
@@ -35,13 +35,29 @@ async function setupRoutes() {
     //   result = await httpRequest('localhost', 4000, '/' + values[i])
     //   resultList.push(result);
     // }
-    
+    const values = ['key1', 'key2', 'key3']
+
     const resultList = await Promise.all(
       values.map(v => httpRequest('localhost', 4000, '/' + v))
     )
 
     console.log({ resultList });
-    res.status(200).send(resultList + 'ok');
+    res.status(200).send(resultList.toString());
+  })
+
+  app.get('/set-values', async (_, res) => {
+    const testItens = [
+      { key: 'key1', value: 'value1' },
+      { key: 'key2', value: 'value2' },
+      { key: 'key3', value: 'value3' },
+    ]
+
+    await Promise.all(
+      testItens.map(i => httpRequest('localhost', 4000, `/set?key=${i.key}&value=${i.value}`))
+    ).then((result) => {
+      res.status(200).send(result.toString());
+    })
+    
   })
 };
 

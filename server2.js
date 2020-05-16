@@ -19,7 +19,7 @@ async function setupRoutes() {
     console.log('args', req.query);
     const { key, value } = req.query
 
-    redisClient.set(key, value)
+    redisClient.set(key, value, (err, reply) => res.status(200).send(reply.toString()))
   })
 
   app.get('/:key', (req, res) => {
