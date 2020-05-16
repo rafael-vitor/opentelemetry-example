@@ -2,13 +2,14 @@ const { createTracer } = require('./tracer'); // needs to be done before modules
 createTracer('server-redis');
 
 const express = require('express')
-const { redis } = require('./setup-redis')
+const Redis = require("ioredis");
+const redis = new Redis();
 
 const app = express()
 const port = 4000
 
 async function setupRoutes() {
-  const redisClient = await redis;
+  const redisClient = redis;
   
   app.get('/set', (req, res) => {
     if (!req.query) {
@@ -33,7 +34,6 @@ async function setupRoutes() {
       res.status(200).send(result);
     });
   })
-  
 };
 
 
