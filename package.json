@@ -14,9 +14,11 @@
     "@opentelemetry/node": "^0.7.0",
     "@opentelemetry/plugin-express": "^0.7.0",
     "@opentelemetry/plugin-http": "^0.7.0",
-    "@opentelemetry/plugin-redis": "^0.7.0",
+    "@opentelemetry/plugin-ioredis": "^0.7.0",
     "@opentelemetry/tracing": "^0.7.0",
     "express": "^4.17.1",
+    "express-cluster": "^0.0.5",
+    "ioredis": "^4.14.1",
     "redis": "2.6.0"
   }
 }
