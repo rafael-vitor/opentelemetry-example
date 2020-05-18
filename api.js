@@ -7,6 +7,8 @@ const http = require('http');
 const app = express()
 const port = 3000
 
+const middleware_url = process.env.MIDDLEWARE_URL || 'localhost'
+
 const httpRequest = (host, port, path) => {
   return new Promise((resolve, reject) => {
     http.get({
@@ -28,8 +30,9 @@ const values = ['key1', 'key2', 'key3']
 
 async function setupRoutes() {
   app.get('/', async (_, res) => {
+    console.log('get /', middleware_url);
     const resultList = await Promise.all(
-      values.map(v => httpRequest('localhost', 4000, '/' + v))
+      values.map(v => httpRequest(middleware_url, 4000, '/' + v))
     )
 
     console.log({ resultList });
@@ -41,7 +44,7 @@ async function setupRoutes() {
     let result;
 
     for (let i = 0; i < values.length; i++) {
-      result = await httpRequest('localhost', 4000, '/' + values[i])
+      result = await httpRequest(middleware_url, 4000, '/' + values[i])
       resultList.push(result);
     }
 
@@ -57,7 +60,7 @@ async function setupRoutes() {
     ]
 
     await Promise.all(
-      testItens.map(i => httpRequest('localhost', 4000, `/set?key=${i.key}&value=${i.value}`))
+      testItens.map(i => httpRequest(middleware_url, 4000, `/set?key=${i.key}&value=${i.value}`))
     ).then((result) => {
       res.status(200).send(result.toString());
     })
