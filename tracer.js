@@ -5,7 +5,11 @@ const { SimpleSpanProcessor } = require('@opentelemetry/tracing');
 
 const createTracer = (serviceName) => {
   const provider = new NodeTracerProvider();
-  exporter = new JaegerExporter({ serviceName });
+  /** @type {ExporterConfig} */
+  exporter = new JaegerExporter({
+    serviceName,
+    host: 'jaeger'
+  });
   provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
   provider.register();
 
