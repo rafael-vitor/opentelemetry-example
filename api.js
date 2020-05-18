@@ -28,48 +28,42 @@ const httpRequest = (host, port, path) => {
 
 const values = ['key1', 'key2', 'key3']
 
-async function setupRoutes() {
-  app.get('/', async (_, res) => {
-    console.log('get /', middleware_url);
-    const resultList = await Promise.all(
-      values.map(v => httpRequest(middleware_url, 4000, '/' + v))
-    )
+app.get('/', async (_, res) => {
+  console.log('get /', middleware_url);
+  const resultList = await Promise.all(
+    values.map(v => httpRequest(middleware_url, 4000, '/' + v))
+  )
 
-    console.log({ resultList });
-    res.status(200).send(resultList.toString());
+  console.log({ resultList });
+  res.status(200).send(resultList.toString());
+})
+
+app.get('/get-sync', async (_, res) => {
+  let resultList = [];
+  let result;
+
+  for (let i = 0; i < values.length; i++) {
+    result = await httpRequest(middleware_url, 4000, '/' + values[i])
+    resultList.push(result);
+  }
+
+  console.log({ resultList });
+  res.status(200).send(resultList.toString());
+})
+
+app.get('/set-values', async (_, res) => {
+  const testItens = [
+    { key: 'key1', value: 'value1' },
+    { key: 'key2', value: 'value2' },
+    { key: 'key3', value: 'value3' },
+  ]
+
+  await Promise.all(
+    testItens.map(i => httpRequest(middleware_url, 4000, `/set?key=${i.key}&value=${i.value}`))
+  ).then((result) => {
+    res.status(200).send(result.toString());
   })
+})
 
-  app.get('/get-sync', async (_, res) => {
-    let resultList = [];
-    let result;
-
-    for (let i = 0; i < values.length; i++) {
-      result = await httpRequest(middleware_url, 4000, '/' + values[i])
-      resultList.push(result);
-    }
-
-    console.log({ resultList });
-    res.status(200).send(resultList.toString());
-  })
-  
-  app.get('/set-values', async (_, res) => {
-    const testItens = [
-      { key: 'key1', value: 'value1' },
-      { key: 'key2', value: 'value2' },
-      { key: 'key3', value: 'value3' },
-    ]
-
-    await Promise.all(
-      testItens.map(i => httpRequest(middleware_url, 4000, `/set?key=${i.key}&value=${i.value}`))
-    ).then((result) => {
-      res.status(200).send(result.toString());
-    })
-    
-  })
-};
-
-
-setupRoutes().then(() => {
-  app.listen(port);
-  console.log(`Listening on http://localhost:${port}`);
-});
+app.listen(port);
+console.log(`Listening on http://localhost:${port}`);
