@@ -4,7 +4,8 @@ const tracer = createTracer('server-redis');
 const express = require('express')
 const Redis = require("ioredis");
 const cluster = require('express-cluster');
-const redis = new Redis();
+console.log(process.env.REDIS_HOST);
+const redis = new Redis(process.env.REDIS_HOST || 'localhost');
 
 const app = express()
 const port = 4000
