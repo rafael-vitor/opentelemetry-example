@@ -1,0 +1,45 @@
+api:
+  build: ./
+  container_name: api
+  ports:
+    - 3000:3000
+  environment:
+    - NODE_ENV=PRODUCTION
+    - PORT=3000
+    - MIDDLEWARE_URL=middleware
+  links:
+    - middleware
+    - jaeger
+  command:
+    sh -c 'node /usr/src/app/api.js'
+  expose:
+    - 3000
+    
+middleware:
+  build: ./
+  container_name: middleware
+  ports:
+    - 4000:4000
+  links:
+    - redis
+    - jaeger
+  environment:
+    - NODE_ENV=PRODUCTION
+    - PORT=4000
+    - REDIS_HOST=redis://db
+  command:
+    sh -c 'node /usr/src/app/middleware.js'
+  expose:
+    - 4000
+
+redis:
+  image: redis
+  container_name: db
+  expose:
+    - 6379
+
+jaeger:
+  image: jaegertracing/all-in-one:1.17
+  ports:
+    - "6831:6831/udp"
+    - "16686:16686"
