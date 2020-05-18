@@ -45,4 +45,4 @@ cluster(function(worker) {
   setupRoutes();
   console.log(`Listening on http://localhost:${port}`);
   return app.listen(port);
-}, {count: 3})
+}, {count: 1})
