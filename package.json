@@ -19,6 +19,6 @@
     "express": "^4.17.1",
     "express-cluster": "^0.0.5",
     "ioredis": "^4.14.1",
-    "redis": "2.6.0"
+    "redis": "3.1.1"
   }
 }
